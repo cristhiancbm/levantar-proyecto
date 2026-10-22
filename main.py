@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.core.database import Base, engine, verificar_conexion_db
+from app.routers import usuario
 import app.models
 
 @asynccontextmanager
@@ -20,10 +21,5 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Endpoint GET raíz 
-@app.get("/")
-def ruta_raiz():
-    return {
-        "estado": "exitoso",
-        "mensaje": "Servidor activo y respondiendo correctamente."
-    }
+# rutas / endpoints
+app.include_router(usuario.router)
