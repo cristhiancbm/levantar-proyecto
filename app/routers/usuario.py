@@ -24,3 +24,7 @@ def crear_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     db.refresh(nuevo_usuario)
 
     return nuevo_usuario
+@router.get("/", response_model=list[UsuarioResponse])
+def listar_usuarios(db: Session = Depends(get_db)):
+    # Retorna todos los usuarios registrados
+    return db.query(Usuario).all()
