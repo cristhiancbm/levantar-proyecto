@@ -1,11 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.core.database import Base, engine, verificar_conexion_db
-from app.models.usuario import Usuario
-from app.models.materia import Materia
-from app.models.trabajo import Trabajo
-from app.models.inscripcion import Inscripcion
-from app.models.calificacion import Calificacion
+import app.models
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
