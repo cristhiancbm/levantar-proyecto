@@ -76,3 +76,18 @@ def actualizar_parcial_usuario(
     db.commit()
 
     return {"mensaje": "Usuario actualizado exitosamente"}
+
+@router.delete("/{usuario_id}")
+def eliminar_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    # Buscar si el usuario existe en la base de datos
+    db_usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if not db_usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
+
+    # Eliminar el registro y confirmar los cambios
+    db.delete(db_usuario)
+    db.commit()
+
+    # Retornar un mensaje de confirmación
+    return {"mensaje": "Usuario eliminado exitosamente"}
+
