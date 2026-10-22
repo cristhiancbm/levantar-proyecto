@@ -1,10 +1,15 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.core.database import verificar_conexion_db
+from app.core.database import Base, engine, verificar_conexion_db
+from app.models.usuario import Usuario
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     verificar_conexion_db()
+
+# Crea las tablas
+    Base.metadata.create_all(bind=engine)
+
     yield
 
 # Instancia principal de la aplicación
