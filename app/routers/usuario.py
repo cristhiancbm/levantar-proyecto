@@ -1,6 +1,6 @@
 from app.core.database import get_db
 from app.models.usuario import Usuario
-from app.schemas.usuario import UsuarioCreate, UsuarioResponse
+from app.schemas.usuario import UsuarioCreate, UsuarioResponse, UsuarioUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -56,3 +56,23 @@ def actualizar_usuario_completo(
     db.refresh(db_usuario)
 
     return db_usuario
+
+@router.patch("/{usuario_id}")
+def actualizar_parcial_usuario(
+    usuario_id: int,
+    usuario: UsuarioUpdate,
+    db: Session = Depends(get_db),
+):
+    # Filtramos solo los datos que el usuario envió realmente
+    datos_update = usuario.model_dump(exclude_unset=True)
+
+    if not datos_update:
+        raise HTTPException(
+            status_code=400, detail="No se enviaron datos para actualizar."
+        )
+
+    # Actualizamos directamente en la base de datos en una sola línea
+    db.query(Usuario).filter(Usuario.id == usuario_id).update(datos_update)
+    db.commit()
+
+    return {"mensaje": "Usuario actualizado exitosamente"}

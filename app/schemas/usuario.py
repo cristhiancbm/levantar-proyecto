@@ -24,3 +24,15 @@ class UsuarioResponse(UsuarioBase):
 
   class Config:
     from_attributes = True
+
+class UsuarioUpdate(BaseModel):
+    nombres: str | None = None
+    apellidos: str | None = None
+    profesion: str | None = None
+    carnet: int | None = None
+    matricula: str | None = None
+    celular: str | None = None
+    correo: EmailStr | None = None
+    rol: RolEnum | None = None
+    contrasena: str | None = None
+    
