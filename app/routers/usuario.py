@@ -28,3 +28,31 @@ def crear_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
 def listar_usuarios(db: Session = Depends(get_db)):
     # Retorna todos los usuarios registrados
     return db.query(Usuario).all()
+
+@router.put("/{usuario_id}", response_model=UsuarioResponse)
+def actualizar_usuario_completo(
+    usuario_id: int,
+    usuario: UsuarioCreate,  # Exige absolutamente todos los campos
+    db: Session = Depends(get_db),
+):
+    # Buscamos al usuario
+    db_usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if not db_usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
+
+    # Actualizamos todos los campos de golpe
+    db_usuario.nombres = usuario.nombres
+    db_usuario.apellidos = usuario.apellidos
+    db_usuario.profesion = usuario.profesion
+    db_usuario.carnet = usuario.carnet
+    db_usuario.matricula = usuario.matricula
+    db_usuario.celular = usuario.celular
+    db_usuario.correo = usuario.correo
+    db_usuario.rol = usuario.rol
+    db_usuario.contrasena = usuario.contrasena
+
+    # Guardamos los cambios
+    db.commit()
+    db.refresh(db_usuario)
+
+    return db_usuario
