@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 
-@router.post("/", response_model=UsuarioResponse)
+@router.post("/", response_model=UsuarioResponse, status_code=201)
+
 def crear_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     # Verificar si el correo ya está registrado en la base de datos
     db_user = db.query(Usuario).filter(Usuario.correo == usuario.correo).first()
