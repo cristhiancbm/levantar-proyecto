@@ -16,6 +16,7 @@ class Usuario(Base):
     celular = Column(String(8), nullable=False)
     correo = Column(String(100), unique=True, index=True, nullable=False)
     rol = Column(Enum(RolEnum), nullable=False)
+    contrasena = Column(String(255), nullable=False)
 
     # Relaciones
     inscripciones = relationship("Inscripcion", back_populates="estudiante")
